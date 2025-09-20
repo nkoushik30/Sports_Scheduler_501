@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Browse Sports | Sports Scheduler</title>
+  <link rel="stylesheet" href="CSS/sports.css" />
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="navbar-logo">Sports Scheduler</div>
+      <ul>
+    <li><a href="index.html" onclick="showPage('home'); return false;">Home</a></li>
+    <li><a href="dashboard.html" onclick="showPage('dashboard'); return false;">Dashboard</a></li>
+    <li><a href="sports.html" onclick="showPage('sports'); return false;">Sports</a></li>
+    <li><a href="create.html" onclick="showPage('create'); return false;">Create Session</a></li>
+    <li>
+       </li>
+  </ul>
+
+      <button class="navbar-toggle" aria-label="Open navigation">&#9776;</button>
+    </nav>
+  </header>
+
+  <main>
+   <section id="registration-form-section">
+      <h2>Register for a Sport/Team</h2><section id="create" class="page hidden">
+  <h2>Create Sport Session (Admin Only)</h2>
+  <form id="createSportForm">
+    <div class="form-group" style="position: relative;">
+  <label for="sportName">Sport Name</label>
+  <input type="text" id="sportName" name="sportName" required placeholder="Type to search...">
+  <div id="sport-suggestions" class="suggestions"></div>
+</div>
+
+    <label for="sportDate">Date</label>
+    <input type="date" id="sportDate" name="date" required />
+
+    <label for="sportTime">Time</label>
+    <input type="time" id="sportTime" name="time" required />
+
+    <label for="teamSize">Team Size</label>
+    <input type="number" id="teamSize" name="teamSize" min="1" required />
+
+    <button type="submit">Add Sport</button>
+  </form>
+</section>
+
+      <p id="registration-status"></p>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Sports Scheduler. All rights reserved.</p>
+  </footer>
+
+  <script src="js/sports.js"></script>
+</body>
+</html>

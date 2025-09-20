@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sport Scheduler</title>
+    <style>
+        /* --- 1. Global Styles & Variables --- */
+        :root {
+            --primary-color: #4a90e2; /* A modern blue */
+            --secondary-color: #50e3c2; /* A vibrant teal */
+            --background-color: #f4f7f6;
+            --dark-color: #333;
+            --light-color: #fff;
+            --error-color: #e74c3c;
+            --success-color: #2ecc71;
+            --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--dark-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 450px;
+            padding: 2rem;
+            background: var(--light-color);
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Authentication Container */
+        .logo {
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: var(--dark-color);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .form-group {
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .btn {
+            padding: 0.9rem;
+            border: none;
+            border-radius: 5px;
+            background: var(--primary-color);
+            color: var(--light-color);
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        .btn:hover {
+            background: #3a7ac8;
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background-color: #777;
+        }
+
+        .btn-secondary:hover {
+            background-color: #666;
+        }
+
+        .toggle-form button {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .error-message, .success-message {
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border-radius: 5px;
+            font-weight: 500;
+        }
+
+        .error-message {
+            background-color: #fbe9e7;
+            color: var(--error-color);
+        }
+
+        .success-message {
+            background-color: #e8f5e9;
+            color: var(--success-color);
+        }
+
+        .dashboard {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .user-info {
+            padding: 1rem;
+            background: var(--background-color);
+            border-radius: 8px;
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .role-badge.role-admin {
+            background-color: var(--primary-color);
+            color: var(--light-color);
+        }
+
+        .role-badge.role-player {
+            background-color: var(--secondary-color);
+            color: var(--dark-color);
+        }
+
+        .sports-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .sport-card {
+            background: var(--background-color);
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            text-align: left;
+        }
+
+        .card-actions {
+            margin-top: 1rem;
+        }
+
+        .players-list {
+            margin-top: 0.5rem;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .modal-content {
+            background: var(--light-color);
+            padding: 2rem;
+            border-radius: 8px;
+            min-width: 320px;
+            max-width: 90vw;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute; top: 10px; right: 10px;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .message-banner {
+            position: fixed;
+            top: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            min-width: 200px;
+            padding: 1rem;
+            border-radius: 6px;
+            font-weight: 600;
+            background: var(--success-color);
+            color: var(--light-color);
+            z-index: 100;
+            display: none;
+        }
+        .message-banner.error {
+            background: var(--error-color);
+        }
+        .message-banner.visible {
+            display: block !important;
+        }
+
+        @media (max-width: 500px) {
+            .container {
+                padding: 1.5rem;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+        }/* Navbar container */
+.navbar-logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #fff;
+    background-color: #1e3a8a; /* Dark blue background */
+    padding: 10px 20px;
+    border-radius: 8px;
+    display: inline-block;
+    margin-right: 20px;
+}
+
+/* Navbar list styling */
+ul {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+    padding-left: 0;
+    align-items: center;
+}
+
+/* Navbar links */
+ul li a {
+    text-decoration: none;
+    color: #1e3a8a;
+    background-color: #fff;
+    padding: 8px 16px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    position: relative;
+    font-weight: 500;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+
+/* Pop-up hover effect */
+ul li a:hover {
+    transform: translateY(-5px); /* pop-up effect */
+    background-color: #1e3a8a;
+    color: #fff;
+    box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+}
+
+/* Optional: add a little shadow on the navbar itself */
+nav {
+    padding: 10px 20px;
+    background-color: #f3f4f6;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    border-radius: 10px;
+}
+
+    </style>
+</head>
+<body>
+    <!-- Message Banner -->
+    <div id="message-banner" class="message-banner hidden"></div>
+
+    <!-- Authentication Container -->
+    <div id="auth-container" class="container">
+        <div class="logo">
+            <h1>🏆 Sport Scheduler</h1>
+            <p>Manage your sports sessions</p>
+        </div>
+
+        <div id="auth-error-message" class="error-message hidden"></div>
+
+        <!-- Sign In Form -->
+        <form id="signInForm">
+            <h2>Sign In</h2>
+            <div class="form-group">
+                <label for="signInEmail">Email</label>
+                <input type="email" id="signInEmail" name="signInEmail" required placeholder="your@email.com">
+            </div>
+            <div class="form-group">
+                <label for="signInPassword">Password</label>
+                <input type="password" id="signInPassword" name="signInPassword" required>
+            </div>
+            <button type="submit" class="btn">Sign In</button>
+            <p class="toggle-form">Don't have an account? <button type="button" id="showSignUp">Create one</button></p>
+        </form>
+
+        <!-- Sign Up Form -->
+        <form id="signUpForm" class="hidden">
+            <h2>Create Account</h2>
+            <div class="form-group">
+                <label for="signUpEmail">Email</label>
+                <input type="email" id="signUpEmail" name="signUpEmail" required placeholder="your@email.com">
+            </div>
+            <div class="form-group">
+                <label for="signUpPassword">Password</label>
+                <input type="password" id="signUpPassword" name="signUpPassword" required placeholder="Min. 6 characters">
+            </div>
+            <div class="form-group">
+                <label for="userRole">I am a...</label>
+                <select id="userRole" name="userRole" required>
+                    <option value="player">Player</option>
+                    <option value="admin">Administrator</option>
+                </select>
+            </div>
+            <button type="submit" class="btn">Create Account</button>
+            <p class="toggle-form">Already have an account? <button type="button" id="showSignIn">Sign In</button></p>
+        </form>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard-container" class="hidden">
+        <header class="app-header">
+            <div class="user-info">
+                <span id="user-email-display"></span>
+                <span id="user-role-display"></span>
+            </div>
+            <div class="header-actions">
+                <button class="btn admin-only" onclick="document.getElementById('add-sport-modal').classList.remove('hidden')">
+                    ＋ Add Sport
+                </button>
+                <button class="btn btn-secondary" id="sign-out-btn">Sign Out</button>
+            </div>
+        </header>
+
+        <main class="app-main">
+            <h2>Available Sports</h2>
+            <div id="sports-list" class="sports-grid"></div>
+        </main>
+    </div>
+
+    <!-- Add Sport Modal -->
+    <div id="add-sport-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn" onclick="document.getElementById('add-sport-modal').classList.add('hidden')">&times;</span>
+            <form id="add-sport-form">
+                <h2>Add a New Sport</h2>
+                <div class="form-group">
+                    <label for="sportName">Sport Name</label>
+                    <input type="text" id="sportName" name="sportName" required>
+                </div>
+                <div class="form-group">
+                    <label for="sportDate">Date</label>
+                    <input type="date" id="sportDate" name="sportDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="sportTime">Time</label>
+                    <input type="time" id="sportTime" name="sportTime" required>
+                </div>
+                <div class="form-group">
+                    <label for="teamCaptain">Team Captain</label>
+                    <input type="text" id="teamCaptain" name="teamCaptain" required>
+                </div>
+                <div class="form-group">
+                    <label for="teamSize">Max Players</label>
+                    <input type="number" id="teamSize" name="teamSize" required min="1">
+                </div>
+                <button type="submit" class="btn">Save Sport</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Firebase impor
+        // --- 1. FIREBASE CONFIGURATION ---
+        // IMPORTANT: Replace with your actual Firebase project configuration
+       const firebaseConfig = {
+  apiKey: "AIzaSyBY5-8gYZrS8jqS5jtIB0iw3fR2QELnKwE",   // 🔹 from console
+  authDomain: "sportsscheduler501-2075c.firebaseapp.com",
+  projectId: "sportsscheduler501-2075c",
+  storageBucket: "sportsscheduler501-2075c.appspot.com",
+  messagingSenderId: "100593070892795217818",        // 🔹 matches client_id
+  appId: "1:100593070892795217818:web-545458719969" // 🔹 from console
+};
+  
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // --- 2. DOM ELEMENTS ---
+    const authContainer = document.getElementById('auth-container');
+    const signInForm = document.getElementById('signInForm');
+    const signUpForm = document.getElementById('signUpForm');
+    const showSignUp = document.getElementById('showSignUp');
+    const showSignIn = document.getElementById('showSignIn');
+    const authErrorMessage = document.getElementById('auth-error-message');
+    const userEmailDisplay = document.getElementById('user-email-display');
+    const signOutBtn = document.getElementById('sign-out-btn');
+
+    let currentUser = null;
+
+    // --- 3. AUTH STATE LISTENER ---
+    auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        currentUser = user;
+        userEmailDisplay.textContent = `Logged in as: ${user.email}`;
+        // ✅ Redirect to dashboard.html after login
+        window.location.href = "create.html";
+      } else {
+        currentUser = null;
+        authContainer.style.display = 'block';
+        document.getElementById('dashboard-container').style.display = 'none';
+      }
+    });
+
+    // --- 4. TOGGLE FORMS ---
+    showSignUp.addEventListener('click', () => {
+      signInForm.classList.add('hidden');
+      signUpForm.classList.remove('hidden');
+    });
+
+    showSignIn.addEventListener('click', () => {
+      signUpForm.classList.add('hidden');
+      signInForm.classList.remove('hidden');
+    });
+
+    // --- 5. SIGNUP ---
+    signUpForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = signUpForm['signUpEmail'].value;
+      const password = signUpForm['signUpPassword'].value;
+
+      try {
+        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+
+        // save user profile in Firestore
+        await db.collection('users').doc(userCredential.user.uid).set({
+          email: userCredential.user.email,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        alert("Signup successful!");
+      } catch (error) {
+        showAuthError(getFirebaseErrorMessage(error.code));
+      }
+    });
+
+    // --- 6. SIGNIN ---
+    signInForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = signInForm['signInEmail'].value;
+      const password = signInForm['signInPassword'].value;
+
+      try {
+        await auth.signInWithEmailAndPassword(email, password);
+        // on success, redirect is handled by onAuthStateChanged
+      } catch (error) {
+        showAuthError(getFirebaseErrorMessage(error.code));
+      }
+    });
+
+    // --- 7. SIGNOUT ---
+    signOutBtn.addEventListener('click', () => {
+      auth.signOut();
+    });
+
+    // --- 8. ERROR HANDLER ---
+    const showAuthError = (message) => {
+      authErrorMessage.textContent = message;
+      authErrorMessage.classList.remove('hidden');
+      setTimeout(() => authErrorMessage.classList.add('hidden'), 5000);
+    };
+
+    const getFirebaseErrorMessage = (errorCode) => {
+      const messages = {
+        'auth/user-not-found': 'No account found with this email.',
+        'auth/wrong-password': 'Incorrect password.',
+        'auth/email-already-in-use': 'Email already registered.',
+        'auth/weak-password': 'Password must be at least 6 characters.',
+        'auth/invalid-email': 'Enter a valid email.'
+      };
+      return messages[errorCode] || 'Unexpected error.';
+    };
+    
+    }); // <-- closes DOMContentLoaded event listener
+    </script>
+</body>
+</html>
+

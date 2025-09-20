@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin - Add Sport</title>
+<style>
+/* Reset some body styles */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f3f4f6;
+  margin: 0;
+  padding: 0;
+}
+
+/* Header and Navbar */
+header {
+  background: #fff;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  padding: 10px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.navbar-logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #1e3a8a;
+}
+
+ul {
+  list-style: none;
+  display: flex;
+  gap: 15px;
+  padding-left: 0;
+  margin: 0;
+  align-items: center;
+}
+
+ul li a {
+  text-decoration: none;
+  color: #1e3a8a;
+  background-color: #fff;
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+
+ul li a:hover {
+  transform: translateY(-3px);
+  background-color: #1e3a8a;
+  color: #fff;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+}
+
+/* Main content container */
+main {
+  max-width: 600px;
+  margin: 40px auto;
+  background: #fff;
+  padding: 30px 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Form styling */
+form input,
+form button {
+  width: 100%;
+  padding: 12px;
+  margin: 12px 0;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+form button {
+  background: #1e3a8a;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+form button:hover {
+  background: #3b82f6;
+}
+
+/* Responsive adjustments */
+@media(max-width: 500px){
+  .navbar {
+    flex-direction: column;
+    gap: 10px;
+  }
+  ul {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+</style>
+
+</head>
+<body>
+<header>
+    <nav class="navbar">
+      <div class="navbar-logo">Sports Scheduler</div>
+      <ul>
+    <li><a href="index.html" onclick="showPage('home'); return false;">Home</a></li>
+    <li><a href="dashboard.html" onclick="showPage('dashboard'); return false;">Dashboard</a></li>
+    <li><a href="sports.html" onclick="showPage('sports'); return false;">Sports</a></li>
+    <li>
+       </li>
+  </ul>
+    </nav>
+  </header>
+
+<main>
+  <h2>Admin - Add Sport</h2>
+  <form id="sportForm">
+    <input type="text" name="name" placeholder="Sport Name" required>
+    <input type="number" name="teamSize" placeholder="Team Size" required>
+    <button type="submit">Add Sport</button>
+  </form>
+</main>
+
+<script src="js/user.js"></script>
+</body>
+</html>

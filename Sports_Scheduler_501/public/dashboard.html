@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sports Scheduler Dashboard</title>
+  <link rel="stylesheet" href="CSS/dashboard.css">
+</head>
+<body>
+  <!-- Login Popup -->
+  <div id="authPopup" class="popup">
+    <div class="popup-content">
+      <h2>Login</h2>
+      <form id="loginForm">
+        <label for="username">Username</label>
+        <input type="text" id="username" placeholder="Enter username" required>
+        <label for="role">Role</label>
+        <select id="role">
+          <option value="player">Player</option>
+          <option value="admin">Admin</option>
+        </select>
+        <button type="submit" class="primary">Login</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="dashboard" class="dashboard hidden">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h2>Sports Scheduler</h2>
+      <ul>
+        <li id="navHome" class="active">Home</li>
+        <li id="navAdmin" class="admin-only">Manage Sports</li>
+        <li id="navPlayer" class="player-only">My Sessions</li>
+        <li id="navReports">Reports</li>
+        <li id="logoutBtn">Logout</li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="topbar">
+        <h1 id="dashboardTitle">Welcome</h1>
+      </header>
+
+      <section id="contentArea">
+        <!-- Home Section -->
+        <div id="homeSection" class="card-section">
+          <h2>Available Sports</h2>
+          <table id="sportsTable">
+            <thead>
+              <tr>
+                <th>Sport</th>
+                <th>Level</th>
+                <th>Sessions</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Admin Panel -->
+        <div id="adminSection" class="hidden card-section">
+          <h2>Manage Sports</h2>
+          <button id="addSportBtn" class="primary">Add Sport</button>
+          <table id="adminSportsTable">
+            <thead>
+              <tr>
+                <th>Sport Name</th>
+                <th>Level</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Player Panel -->
+        <div id="playerSection" class="hidden card-section">
+          <h2>My Sessions</h2>
+          <table id="playerSessionsTable">
+            <thead>
+              <tr>
+                <th>Sport</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Reports Section -->
+        <div id="reportsSection" class="hidden card-section">
+          <h2>Reports</h2>
+          <div class="chart-container">
+            <canvas id="reportChart"></canvas>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Add Sport Modal -->
+  <div id="addSportModal" class="modal hidden">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Add New Sport</h2>
+      <form id="addSportForm">
+        <label for="sportName">Sport Name</label>
+        <input type="text" id="sportName" placeholder="Enter sport name" required>
+        <label for="sportLevel">Level</label>
+        <select id="sportLevel">
+          <option value="Beginner">Beginner</option>
+          <option value="Intermediate">Intermediate</option>
+          <option value="Advanced">Advanced</option>
+        </select>
+        <button type="submit" class="primary">Add Sport</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
